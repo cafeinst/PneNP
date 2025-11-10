@@ -1,0 +1,25 @@
+Definition of Subset-sum: Let as(1),as(2),…,as(n), s be in Z. The problem of determining whether there exists xs in {0,1}^n such that as(1)*xs(1)+…+as(n)*xs(n)=s is called Subset-sum.
+
+Definition: Let Eq(as,s) = the set of equations logically equivalent to the equation as(1)*xs(1)+…+as(n)*xs(n)=s, where xs is in {0,1}^n.
+
+For instance, as(1)*xs(1) + as(2)*xs(2) + as(3)*xs(3) = s is logically equivalent to as(1)*xs(1) = s - as(2)*xs(2) - as(3)*xs(3), since one is true iff the other is true.
+
+Definition: Let e(as,s) be in Eq(as,s). Let LHS(e(as,s)) be the set of possible values on the left hand side of equation e(as,s). Let RHS(e(as,s)) be the set of possible values on the right hand side of equation e(as,s).
+
+For instance, if e(as,s) is the equation, as(1)*xs(1) = s - as(2)*xs(2) - as(3)*xs(3), then LHS(e(as,s)) = {as(1),0} and RHS(e(as,s)) = {s,s-as(2),s-as(3),s-as(2)-as(3)}. 
+
+Lemma 1: Assume each subset-sum is distinct. In order for a Turing machine T to determine whether as(1)*xs(1)+…+as(n)xs(n) = s for some xs in {0,1}^n, it is necessary for T to read at least one bit representing each element of LHS(e(as,s)) and at least one bit representing each element of RHS(e(as,s)) for some input (as,s) and e(as,s) in Eq(as,s), in which T would take at least card LHS(e(as,s)) + card RHS(e(as,s)) steps.
+
+Proof: Deciding whether as(1)xs(1)+…+as(n)xs(n) = s is equivalent to deciding whether LHS(e(as,s)) intersects RHS(e(as,s)), for any e(as,s) in Eq(as,s). Suppose for the sake of contradiction, for every input (as,s) and e(as,s) in Eq(as,s), T does not read any bits representing at least one element l in LHS(e(as,s)) or at least one element r in RHS(e(as,s)). Now let us only consider the instances (as,s) in which either l = r or there is no solution to Subset-sum; it is impossible for T to avoid the possibility that l = r without reading some bits representing l and r. Then deciding whether l = r would be equivalent to Subset-sum. Since T would not read any bits representing either l or r, the output of T would be unaffected by the value of the unread element, so T would output the same answer regardless of whether l = r. But this would mean T would not decide Subset-sum, a contradiction. Therefore, it is necessary for T to read at least one bit representing each element of LHS(e(as,s)) and at least one bit representing each element of RHS(e(as,s)) for some input (as,s) and e(as,s) in Eq(as,s), in which T would take at least card LHS(e(as,s)) + card RHS(e(as,s)) steps.
+
+Lemma 2: Let e(as,s) be in Eq(as,s). Then card LHS(e(as,s)) * card RHS(e(as,s)) >= 2^n, whenever each subset-sum is distinct.
+
+Proof: The equation as(1)xs(1)+…+as(n)xs(n)=s has 2^n expressions on the LHS and one expression on the RHS. If the equation is equivalent to another equation in which k variables in xs are not on one side, this implies that they were subtracted from both sides of the original equation, so they must be on the other side. Then there will be 2^(n-k) expressions on one side and 2^k expressions on the other side. Notice that the product of the number of expressions on each side can never be lower than 2^n. Thus card LHS(e(as,s)) * card RHS(e(as,s)) >= 2^n, whenever each subset-sum is distinct.
+
+Lemma 3: Assume A * B >= 2^n for positive A,B. Then A + B >= 2sqrt(2^n).
+
+Proof: A * B >= 2^n implies 2sqrt(A*B) >= 2sqrt(2^n). The arithmetic-geometric inequality says A + B >= 2sqrt(A*B). Then A + B >= 2sqrt(2^n).
+
+Theorem: It is impossible for an algorithm solving Subset-sum to take o(sqrt(2^n)) time in the worst-case scenario.
+
+Proof: Suppose Turing machine T solves Subset-sum and each subset-sum is distinct. Then it would read all elements in LHS(e(as,s)) and RHS(e(as,s)) for some input (as,s) and e(as,s) in Eq(as,s), which takes at least card LHS(e(as,s)) + card RHS(e(as,s)) steps by Lemma 1. By Lemma 2, card LHS(e(as,s)) * card RHS(e(as,s)) >= 2^n. Then by Lemma 3, card LHS(e(as,s)) + card RHS(e(as,s)) >= 2sqrt(2^n). Then T takes Omega(sqrt(2^n)) time in the worst case scenario.
